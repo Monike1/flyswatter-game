@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  height: 100vh;
+  /* cursor: none; */
+  cursor: url(cursor.png), auto;
+}
+
+canvas {
+  border: 1px solid black;
+  background: lightgray;  
+}

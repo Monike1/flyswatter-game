@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  height: 100vh;
+  cursor: url('img/spatter-red.png'), auto;
+}
+
+canvas {
+  border: 1px solid black;
+  background: lightgray;  
+}
