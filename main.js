@@ -34,7 +34,7 @@ window.addEventListener('click', function(event) {
       flyArray.splice([i], 1);
       score += 1;
     } 
-    if (score === 30) {
+    if (score === 3) {
       gameOver = true;
       console.log('Game over!!!!');
 
@@ -92,9 +92,60 @@ function Fly(x, y, dx, dy, radius) {
   this.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#555';
+    ctx.fillStyle = '#333';
     ctx.fill();
+    // fly eyes ------------------------------
+    // first eye
+    ctx.beginPath();
+    ctx.arc(this.x - 5, this.y, this.radius / 2, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'orange';
+    ctx.fill();
+    //middle of the eye
+    ctx.beginPath();
+    ctx.arc(this.x - 6, this.y - 3, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'lightgray';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x - 4, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#333';
+    ctx.fill();
+    // second eye
+    ctx.beginPath();
+    ctx.arc(this.x + 5, this.y, this.radius / 2, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'orange';
+    ctx.fill();
+    //middle of the eye
+    ctx.beginPath();
+    ctx.arc(this.x + 4, this.y - 3, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'lightgray';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x + 5, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#333';
+    ctx.fill();
+    // wings
+    //first wing
+    ctx.beginPath();
+    ctx.arc(this.x - 14, this.y - 6, this.radius / 1.5, 0, Math.PI, true);
+    ctx.strokeStyle = '#777';
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.x - 20, this.y - 6);
+    ctx.lineTo(this.x - 6, this.y - 4);
+    ctx.strokeStyle = '#777';
+    ctx.stroke();
+    //second wing
+    ctx.beginPath();
+    ctx.arc(this.x + 14, this.y - 6, this.radius / 1.5, 0, Math.PI, true);
+    ctx.strokeStyle = '#777';
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.x + 20, this.y - 6);
+    ctx.lineTo(this.x + 6, this.y - 4);
+    ctx.strokeStyle = '#777';
+    ctx.stroke();
   }
+  
   // to update position of the fly increasing or decreasing x and y 
   this.move = function() {
     if(this.x + this.radius > innerWidth || this.x - this.radius < 0) {
@@ -115,7 +166,7 @@ function Fly(x, y, dx, dy, radius) {
 var flyArray = [];
 // to set flies on screen after clicking start button
 function setFliesOnScreen(e) {
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 3; i++) {
     // dx - x velocity, increase the speed on x-axis 
     //dy - y velocity, increase the speed on y-axis
       var radius = 10;
