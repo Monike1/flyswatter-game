@@ -34,7 +34,7 @@ window.addEventListener('click', function(event) {
       flyArray.splice([i], 1);
       score += 1;
     } 
-    if (score === 5) {
+    if (score === 30) {
       gameOver = true;
       console.log('Game over!!!!');
 
@@ -92,7 +92,7 @@ function Fly(x, y, dx, dy, radius) {
   this.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#333';
+    ctx.fillStyle = '#555';
     ctx.fill();
   }
   // to update position of the fly increasing or decreasing x and y 
@@ -109,26 +109,20 @@ function Fly(x, y, dx, dy, radius) {
 
     this.draw();
   }
-  // this.stopMove = function() {
-    
-  //   this.x += 0;
-  //   this.y += 0;
-  //   this.draw();
-  // }
 }
 
 // creating an array of multiple flies
 var flyArray = [];
 // to set flies on screen after clicking start button
 function setFliesOnScreen(e) {
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 30; i++) {
     // dx - x velocity, increase the speed on x-axis 
     //dy - y velocity, increase the speed on y-axis
       var radius = 10;
       var x = Math.random() * (innerWidth - radius * 2) + radius;
       var y = Math.random() * (innerHeight - radius * 2) + radius;
-      var dx = (Math.random() - 0.5) * 4;
-      var dy = (Math.random() - 0.5) * 4;
+      var dx = (Math.random() - 0.5) * 10;
+      var dy = (Math.random() - 0.5) * 10;
       
       flyArray.push(new Fly(x, y, dx, dy, radius)); 
       flyArray[i].draw();
@@ -172,14 +166,34 @@ function drawGameOverPage() {
   
 }
 
+
+
 function animate() {
   requestAnimationFrame(animate);
   // to clear previous frames and show only the current frame:
   ctx.clearRect(0, 0, innerWidth, innerHeight);
 
-  for (var i = 0; i < flyArray.length; i++) {
-    flyArray[i].move(); 
-  }
+
+    for (var i = 0; i < flyArray.length; i++) {
+      flyArray[i].move(); 
+    }
+  
+    function stopFly() {
+      for (var i = 0; i < flyArray.length; i++) {
+        if (flyArray.length % 2 !== 0) {
+          if (flyArray[i].dx > 2 && flyArray[i].dy > 2 || flyArray[i].dx < -2 && flyArray[i].dy < -2) {
+            flyArray[i].dx = 0;
+            flyArray[i].dy = 0;
+          } 
+        } else if (flyArray.length % 2 === 0) {
+          if (flyArray[i].dx === 0 && flyArray[i].dy === 0) {
+            flyArray[i].dx = (Math.random() - 0.5) * 16;
+            flyArray[i].dy = (Math.random() - 0.5) * 16;
+          } 
+        }
+      }
+    }
+  stopFly();
   
   new SpatterCircle();
   new SpatterCross();
