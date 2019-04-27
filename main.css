@@ -1,11 +1,43 @@
 body {
   margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
-  /* cursor: none; */
   cursor: url(cursor.png), auto;
 }
 
 canvas {
   border: 1px solid black;
   background: lightgray;  
+}
+
+.start-btn {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: white;
+  background-color: green;
+  padding: 20px 30px;
+  border-radius: 5px; 
+  outline: none;
+}
+
+.game-title {
+  display: inline-block;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 70px;
+  color: white;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 940px) {
+  .game-title {
+    font-size: 48px;
+    top: 35%;
+  }
 }
