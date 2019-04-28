@@ -21,7 +21,7 @@ startBtn.addEventListener('click', function() {
   score = 0;
   gameOver = false;
   setFliesOnScreen();
-  animate();
+  // animate();
   startBtn.style.display = 'none';
   gameTitle.style.display = 'none';
 });
@@ -52,16 +52,16 @@ window.addEventListener('mousemove', function(event) {
 
 
 
-//creating crosshairs - SpatterCircle will collide with the flies
-function SpatterCircle() {
+//creating crosshairs - SwatterCircle will collide with the flies
+function SwatterCircle() {
   ctx.beginPath();
   ctx.arc(mouse.x + 28, mouse.y + 27, 15, 0, Math.PI * 2, false);
   ctx.strokeStyle = '#D04D00';
   ctx.stroke();
 }
 
-// to draw a crosshairs inside SpatterCircle - for visual effect
-function SpatterCross() {
+// to draw a crosshairs inside SwatterCircle - for visual effect
+function SwatterCross() {
   ctx.beginPath();
   ctx.moveTo(mouse.x + 14, mouse.y + 27);
   ctx.lineTo(mouse.x + 43, mouse.y + 28);
@@ -102,7 +102,7 @@ function Fly(x, y, dx, dy, radius) {
     ctx.fill();
     //middle of the eye
     ctx.beginPath();
-    ctx.arc(this.x - 6, this.y - 3, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.arc(this.x - 6, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
     ctx.fillStyle = '#FEFEFE';
     ctx.fill();
     ctx.beginPath();
@@ -116,7 +116,7 @@ function Fly(x, y, dx, dy, radius) {
     ctx.fill();
     //middle of the eye
     ctx.beginPath();
-    ctx.arc(this.x + 4, this.y - 3, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.arc(this.x + 4, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
     ctx.fillStyle = '#FEFEFE';
     ctx.fill();
     ctx.beginPath();
@@ -144,6 +144,28 @@ function Fly(x, y, dx, dy, radius) {
     ctx.lineTo(this.x + 6, this.y - 4);
     ctx.strokeStyle = '#A29BAD';
     ctx.stroke();
+    // legs
+    ctx.beginPath();
+    ctx.moveTo(this.x - 5, this.y + 8);
+    ctx.lineTo(this.x - 6, this.y + 12);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.x - 7, this.y + 6);
+    ctx.lineTo(this.x - 8, this.y + 10);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    // second pair of legs
+    ctx.beginPath();
+    ctx.moveTo(this.x + 5, this.y + 8);
+    ctx.lineTo(this.x + 6, this.y + 12);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.x + 7, this.y + 6);
+    ctx.lineTo(this.x + 8, this.y + 10);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
   }
   
   // to update position of the fly increasing or decreasing x and y 
@@ -170,8 +192,8 @@ function setFliesOnScreen(e) {
     // dx - x velocity, increase the speed on x-axis 
     //dy - y velocity, increase the speed on y-axis
       var radius = 10;
-      var x = Math.random() * (innerWidth - radius * 2) + radius;
-      var y = Math.random() * (innerHeight - radius * 2) + radius;
+      var x = Math.random() * (innerWidth - radius * 8) + radius * 4;
+      var y = Math.random() * (innerHeight - radius * 8) + radius * 4;
       var dx = (Math.random() - 0.5) * 10;
       var dy = (Math.random() - 0.5) * 10;
       
@@ -211,8 +233,8 @@ function drawGameOverPage() {
     ctx.beginPath();
     ctx.fillStyle = '#DAD7DE';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    textGameOver('GAME OVER', '75px Arial', canvas.width/2, canvas.height/3);
-    textGameOver(`Score: ${score}`, '30px Arial', canvas.width/2, canvas.height/3 + 75);
+    textGameOver('GAME OVER', '75px Arial', canvas.width/2, canvas.height/3.5);
+    textGameOver(`Score: ${score}`, '30px Arial', canvas.width/2, canvas.height/3.5 + 75);
     startBtn.style.display = 'inline-block';
   
 }
@@ -246,8 +268,8 @@ function animate() {
     }
   stopFly();
   
-  new SpatterCircle();
-  new SpatterCross();
+  new SwatterCircle();
+  new SwatterCross();
   text("Score: " + score, '30px Arial', 50, 50, '#A29BAD');
   if (gameOver === true) {
     drawGameOverPage();
