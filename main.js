@@ -5,6 +5,9 @@ var canvas = document.getElementById('game-canvas');
 var ctx = canvas.getContext('2d');
 var startBtn = document.getElementsByClassName('start-btn')[0];
 var gameTitle = document.getElementsByClassName('game-title')[0];
+// creating an array of multiple flies
+var flyArray = [];
+var deadFlyArray = [];
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -20,8 +23,10 @@ var mouse = {
 startBtn.addEventListener('click', function() {
   score = 0;
   gameOver = false;
+  flyArray = [];
+  deadFlyArray = [];
   setFliesOnScreen();
-  // animate();
+  animate();
   startBtn.style.display = 'none';
   gameTitle.style.display = 'none';
 });
@@ -31,14 +36,19 @@ window.addEventListener('click', function(event) {
   
   for (var i = 0; i < flyArray.length; i++) {
     if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
+      
+        deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 1, 10)); 
+        for (var j = 0; j < deadFlyArray.length; j++) {
+          deadFlyArray[j].draw();
+        }
+        
+      
       flyArray.splice([i], 1);
       score += 1;
     } 
     if (score === 30) {
       gameOver = true;
-      console.log('Game over!!!!');
-
-      drawGameOverPage();
+      console.log('Game over!!!!'); 
     }
   }
   
@@ -94,35 +104,23 @@ function Fly(x, y, dx, dy, radius) {
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = '#252E39';
     ctx.fill();
+    
+    
+    
     // fly eyes ------------------------------
     // first eye
     ctx.beginPath();
     ctx.arc(this.x - 5, this.y, this.radius / 2, 0, Math.PI * 2, false);
     ctx.fillStyle = '#FEB58B';
     ctx.fill();
-    //middle of the eye
-    ctx.beginPath();
-    ctx.arc(this.x - 6, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#FEFEFE';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(this.x - 4, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#252E39';
-    ctx.fill();
     // second eye
     ctx.beginPath();
     ctx.arc(this.x + 5, this.y, this.radius / 2, 0, Math.PI * 2, false);
     ctx.fillStyle = '#FEB58B';
     ctx.fill();
-    //middle of the eye
-    ctx.beginPath();
-    ctx.arc(this.x + 4, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#FEFEFE';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(this.x + 5, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
-    ctx.fillStyle = '#252E39';
-    ctx.fill();
+  }
+
+  this.FlyParts = function() {
     // wings
     //first wing
     ctx.beginPath();
@@ -144,6 +142,7 @@ function Fly(x, y, dx, dy, radius) {
     ctx.lineTo(this.x + 6, this.y - 4);
     ctx.strokeStyle = '#A29BAD';
     ctx.stroke();
+    
     // legs
     ctx.beginPath();
     ctx.moveTo(this.x - 5, this.y + 8);
@@ -166,9 +165,84 @@ function Fly(x, y, dx, dy, radius) {
     ctx.lineTo(this.x + 8, this.y + 10);
     ctx.strokeStyle = '#252E39';
     ctx.stroke();
+    //middle of the eye
+    ctx.beginPath();
+    ctx.arc(this.x - 6, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#FEFEFE';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x - 4, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#252E39';
+    ctx.fill();
+    
+    //middle of the second eye
+    ctx.beginPath();
+    ctx.arc(this.x + 4, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#FEFEFE';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x + 5, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#252E39';
+    ctx.fill();
   }
+
+  this.brokenFlyParts = function() {
+    // broken wings --------------------
+    //first wing
+    ctx.beginPath();
+    ctx.moveTo(this.x - 6, this.y + 7);
+    ctx.lineTo(this.x - 8, this.y + 18);
+    ctx.lineTo(this.x - 15, this.y + 15);
+    ctx.lineTo(this.x - 20, this.y + 20);
+    ctx.strokeStyle = '#A29BAD';
+    ctx.stroke();
+    //second wing
+    ctx.beginPath();
+    ctx.moveTo(this.x + 6, this.y + 7);
+    ctx.lineTo(this.x + 8, this.y + 18);
+    ctx.lineTo(this.x, this.y + 25);
+    ctx.lineTo(this.x, this.y + 18);
+    ctx.lineTo(this.x + 4, this.y + 18);
+    ctx.lineTo(this.x + 6, this.y + 7);
+    ctx.strokeStyle = '#A29BAD';
+    ctx.stroke();
+    // broken legs --------------------
+    ctx.beginPath();
+    ctx.moveTo(this.x + 6, this.y - 16);
+    ctx.lineTo(this.x + 2, this.y - 18);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.x + 10, this.y - 16);
+    ctx.lineTo(this.x + 6, this.y - 20);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    // broken hands
+    ctx.beginPath();
+    ctx.moveTo(this.x - 4, this.y - 12);
+    ctx.lineTo(this.x + 4, this.y - 10);
+    ctx.lineTo(this.x + 1, this.y - 15);
+    ctx.strokeStyle = '#252E39';
+    ctx.stroke();
+    // broken stomach
+    ctx.beginPath();
+    ctx.arc(this.x + 8, this.y - 12, this.radius / 2, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#252E39';
+    ctx.fill();
+    //middle of the eye
+    ctx.beginPath();
+    ctx.arc(this.x - 6, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#FEFEFE';
+    ctx.fill();
+    //middle of the second eye
+    ctx.beginPath();
+    ctx.arc(this.x + 4, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
+    ctx.fillStyle = '#FEFEFE';
+    ctx.fill();
+  }
+
   
-  // to update position of the fly increasing or decreasing x and y 
+  // to update position of the fly by increasing or decreasing x and y 
   this.move = function() {
     if(this.x + (this.radius * 2) > innerWidth || this.x - (this.radius * 2) < 0) {
       this.dx = -this.dx;
@@ -184,8 +258,7 @@ function Fly(x, y, dx, dy, radius) {
   }
 }
 
-// creating an array of multiple flies
-var flyArray = [];
+
 // to set flies on screen after clicking start button
 function setFliesOnScreen(e) {
   for (var i = 0; i < 30; i++) {
@@ -249,7 +322,26 @@ function animate() {
 
     for (var i = 0; i < flyArray.length; i++) {
       flyArray[i].move(); 
+      flyArray[i].FlyParts();
+      
     }
+    // deadFlyArray[0].move();
+    if (deadFlyArray.length > 0) {
+      for (var j = 0; j < deadFlyArray.length; j++) {
+        deadFlyArray[j].move();
+        deadFlyArray[j].brokenFlyParts();
+        // deadFlyArray[j].dy += 1;
+        if (deadFlyArray[j].y > innerHeight - (deadFlyArray[j].radius * 2)) {
+          deadFlyArray.splice([j], 1);
+        }
+      }
+    }
+    
+    
+    
+     
+    
+    
   
     function stopFly() {
       for (var i = 0; i < flyArray.length; i++) {
@@ -260,8 +352,8 @@ function animate() {
           } 
         } else if (flyArray.length % 2 === 0) {
           if (flyArray[i].dx === 0 && flyArray[i].dy === 0) {
-            flyArray[i].dx = (Math.random() - 0.5) * 16;
-            flyArray[i].dy = (Math.random() - 0.5) * 16;
+            flyArray[i].dx = (Math.random() - 0.5) * 10;
+            flyArray[i].dy = (Math.random() - 0.5) * 10;
           } 
         }
       }
