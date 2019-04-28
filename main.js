@@ -37,7 +37,7 @@ window.addEventListener('click', function(event) {
   for (var i = 0; i < flyArray.length; i++) {
     if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
       
-        deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 1, 10)); 
+        deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 2, 10)); 
         for (var j = 0; j < deadFlyArray.length; j++) {
           deadFlyArray[j].draw();
         }
@@ -267,8 +267,8 @@ function setFliesOnScreen(e) {
       var radius = 10;
       var x = Math.random() * (innerWidth - radius * 8) + radius * 4;
       var y = Math.random() * (innerHeight - radius * 8) + radius * 4;
-      var dx = (Math.random() - 0.5) * 10;
-      var dy = (Math.random() - 0.5) * 10;
+      var dx = (Math.random() - 0.5) * 9;
+      var dy = (Math.random() - 0.5) * 9;
       
       flyArray.push(new Fly(x, y, dx, dy, radius)); 
       flyArray[i].draw();
@@ -346,14 +346,14 @@ function animate() {
     function stopFly() {
       for (var i = 0; i < flyArray.length; i++) {
         if (flyArray.length % 2 !== 0) {
-          if ((flyArray[i].dx > 4 || flyArray[i].dy > 4) || (flyArray[i].dx < -4 || flyArray[i].dy < -4)) {
+          if ((flyArray[i].dx > 3.5 || flyArray[i].dy > 3.5) || (flyArray[i].dx < -3.5 || flyArray[i].dy < -3.5)) {
             flyArray[i].dx = 0;
             flyArray[i].dy = 0;
           } 
         } else if (flyArray.length % 2 === 0) {
           if (flyArray[i].dx === 0 && flyArray[i].dy === 0) {
-            flyArray[i].dx = (Math.random() - 0.5) * 10;
-            flyArray[i].dy = (Math.random() - 0.5) * 10;
+            flyArray[i].dx = (Math.random() - 0.5) * 9;
+            flyArray[i].dy = (Math.random() - 0.5) * 9;
           } 
         }
       }
