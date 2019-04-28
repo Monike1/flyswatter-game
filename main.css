@@ -1,13 +1,28 @@
+/* colors
+light: #FEFEFE;
+lightgray: #DAD7DE;
+darkergray: #A29BAD;
+burnt orange: #D04D00;
+light orange: #FEB58B;
+darkblue: #252E39; */
+
+
+html {
+  background-color: #A29BAD;
+}
+
 body {
   margin: 0;
+  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  height: 100vh;
   cursor: url(cursor.png), auto;
 }
 
 canvas {
-  border: 1px solid black;
-  background: lightgray;  
+  box-sizing: border-box;
+  display: block;
+  height: 100vh;
+  background: #DAD7DE;
 }
 
 .start-btn {
@@ -18,7 +33,7 @@ canvas {
   transform: translate(-50%, -50%);
   font-size: 20px;
   color: white;
-  background-color: green;
+  background-color: #252E39;
   padding: 20px 30px;
   border-radius: 5px; 
   outline: none;
@@ -31,7 +46,7 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 70px;
-  color: white;
+  color: #FEFEFE;
   text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
 }
 
