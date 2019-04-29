@@ -4,6 +4,7 @@ var startBtn = document.getElementsByClassName('start-btn')[0];
 var gameTitle = document.getElementsByClassName('game-title')[0];
 var flyArray = [];
 var deadFlyArray = [];
+var overlay = document.getElementById("start-game");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -23,32 +24,35 @@ startBtn.addEventListener('click', function() {
   gameOver = false;
   flyArray = [];
   deadFlyArray = [];
-  setFliesOnScreen();
-  animate();
   startBtn.style.display = 'none';
   gameTitle.style.display = 'none';
+  setTimeout(function () {
+    setFliesOnScreen();
+    animate();
+  }, 500)
 });
 
 // to remove flies from the screen and update score; check if game is over
 window.addEventListener('click', function(event) { 
-  swats += 1;
-  for (var i = 0; i < flyArray.length; i++) {
-    if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
-      
-      deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 2, 10)); 
-      for (var j = 0; j < deadFlyArray.length; j++) {
-        deadFlyArray[j].draw();
+  overlay.style.width = "0%";
+  if (startBtn.style.display = 'none') {
+    swats += 1;
+    for (var i = 0; i < flyArray.length; i++) {
+      if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
+
+        deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 2, 10)); 
+        for (var j = 0; j < deadFlyArray.length; j++) {
+          deadFlyArray[j].draw();
+        }
+
+        flyArray.splice([i], 1);
+        score += 1;
+      } 
+      if (score === 30) {
+        gameOver = true;
       }
-        
-      flyArray.splice([i], 1);
-      score += 1;
-    } 
-    if (score === 30) {
-      gameOver = true;
     }
   }
-  
-  
 });
 // to get mouse x and y coordinates
 window.addEventListener('mousemove', function(event) {
@@ -294,6 +298,7 @@ function drawGameOverPage() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     textGameOver('GAME OVER', '75px Arial', canvas.width/2, canvas.height/3.5);
     textGameOver(`Score: ${score}`, '30px Arial', canvas.width/2, canvas.height/3.5 + 75);
+    overlay.style.width = "100%";
     startBtn.style.display = 'inline-block';
 }
 
@@ -307,12 +312,12 @@ function animate() {
     flyArray[i].FlyParts();
     
   }
-  // deadFlyArray[0].move();
+ 
   if (deadFlyArray.length > 0) {
     for (var j = 0; j < deadFlyArray.length; j++) {
       deadFlyArray[j].move();
       deadFlyArray[j].brokenFlyParts();
-      // deadFlyArray[j].dy += 1;
+      
       if (deadFlyArray[j].y > innerHeight - (deadFlyArray[j].radius * 2)) {
         deadFlyArray.splice([j], 1);
       }
@@ -322,7 +327,7 @@ function animate() {
   function stopFly() {
     for (var i = 0; i < flyArray.length; i++) {
       if (flyArray.length % 2 !== 0) {
-        if ((flyArray[i].dx > 3.5 || flyArray[i].dy > 3.5) || (flyArray[i].dx < -3.5 || flyArray[i].dy < -3.5)) {
+        if ((flyArray[i].dx > 3.5 || flyArray[i].dy > 3.5) || (flyArray[i].dx < -3.5 || flyArray[i].dy < -3.5) || (flyArray[i].dx > 2 && flyArray[i].dy > 2) || (flyArray[i].dx < -2 && flyArray[i].dy < -2)) {
           flyArray[i].dx = 0;
           flyArray[i].dy = 0;
         } 
