@@ -13,6 +13,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var score = 0; 
+var swats = -1;
 var gameOver = false;
 
 var mouse = {
@@ -22,6 +23,7 @@ var mouse = {
 
 startBtn.addEventListener('click', function() {
   score = 0;
+  swats = -1;
   gameOver = false;
   flyArray = [];
   deadFlyArray = [];
@@ -33,7 +35,8 @@ startBtn.addEventListener('click', function() {
 
 // to remove flies from the screen and update score; check if game is over
 window.addEventListener('click', function(event) { 
-  
+  swats += 1;
+  console.log(swats);
   for (var i = 0; i < flyArray.length; i++) {
     if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
       
@@ -363,6 +366,10 @@ function animate() {
   new SwatterCircle();
   new SwatterCross();
   text("Score: " + score, '30px Arial', 50, 50, '#A29BAD');
+  text("Swats: " + swats, '30px Arial', 250, 50, '#A29BAD');
+  if (swats === 0 && score > 0) {
+    swats = 1;
+  }
   if (gameOver === true) {
     drawGameOverPage();
   }
