@@ -1,11 +1,7 @@
-console.log("Hello from the console!!!!");
-
-
 var canvas = document.getElementById('game-canvas');
 var ctx = canvas.getContext('2d');
 var startBtn = document.getElementsByClassName('start-btn')[0];
 var gameTitle = document.getElementsByClassName('game-title')[0];
-// creating an array of multiple flies
 var flyArray = [];
 var deadFlyArray = [];
 
@@ -36,22 +32,19 @@ startBtn.addEventListener('click', function() {
 // to remove flies from the screen and update score; check if game is over
 window.addEventListener('click', function(event) { 
   swats += 1;
-  console.log(swats);
   for (var i = 0; i < flyArray.length; i++) {
     if(getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) < 30 && getDistance(mouse.x + 28, mouse.y + 27, flyArray[i].x, flyArray[i].y) > -30) {
       
-        deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 2, 10)); 
-        for (var j = 0; j < deadFlyArray.length; j++) {
-          deadFlyArray[j].draw();
-        }
+      deadFlyArray.push(new Fly(flyArray[i].x, flyArray[i].y, 0, 2, 10)); 
+      for (var j = 0; j < deadFlyArray.length; j++) {
+        deadFlyArray[j].draw();
+      }
         
-      
       flyArray.splice([i], 1);
       score += 1;
     } 
     if (score === 30) {
       gameOver = true;
-      console.log('Game over!!!!'); 
     }
   }
   
@@ -62,8 +55,6 @@ window.addEventListener('mousemove', function(event) {
   mouse.x = event.x;
   mouse.y = event.y;
 });
-
-
 
 //creating crosshairs - SwatterCircle will collide with the flies
 function SwatterCircle() {
@@ -93,7 +84,6 @@ function SwatterCross() {
   ctx.stroke();
 }
 
-
 // creating a Fly constructor function
 function Fly(x, y, dx, dy, radius) {
   this.x = x;
@@ -107,9 +97,6 @@ function Fly(x, y, dx, dy, radius) {
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = '#252E39';
     ctx.fill();
-    
-    
-    
     // fly eyes ------------------------------
     // first eye
     ctx.beginPath();
@@ -145,7 +132,6 @@ function Fly(x, y, dx, dy, radius) {
     ctx.lineTo(this.x + 6, this.y - 4);
     ctx.strokeStyle = '#A29BAD';
     ctx.stroke();
-    
     // legs
     ctx.beginPath();
     ctx.moveTo(this.x - 5, this.y + 8);
@@ -177,7 +163,6 @@ function Fly(x, y, dx, dy, radius) {
     ctx.arc(this.x - 4, this.y - 1, this.radius / 8, 0, Math.PI * 2, false);
     ctx.fillStyle = '#252E39';
     ctx.fill();
-    
     //middle of the second eye
     ctx.beginPath();
     ctx.arc(this.x + 4, this.y - 1, this.radius / 3, 0, Math.PI * 2, false);
@@ -244,9 +229,9 @@ function Fly(x, y, dx, dy, radius) {
     ctx.fill();
   }
 
-  
   // to update position of the fly by increasing or decreasing x and y 
   this.move = function() {
+    //to avoid flying off the screen
     if(this.x + (this.radius * 2) > innerWidth || this.x - (this.radius * 2) < 0) {
       this.dx = -this.dx;
     }
@@ -261,21 +246,20 @@ function Fly(x, y, dx, dy, radius) {
   }
 }
 
-
 // to set flies on screen after clicking start button
 function setFliesOnScreen(e) {
   for (var i = 0; i < 30; i++) {
     // dx - x velocity, increase the speed on x-axis 
     //dy - y velocity, increase the speed on y-axis
-      var radius = 10;
-      var x = Math.random() * (innerWidth - radius * 8) + radius * 4;
-      var y = Math.random() * (innerHeight - radius * 8) + radius * 4;
-      var dx = (Math.random() - 0.5) * 9;
-      var dy = (Math.random() - 0.5) * 9;
+    var radius = 10;
+    var x = Math.random() * (innerWidth - radius * 8) + radius * 4;
+    var y = Math.random() * (innerHeight - radius * 8) + radius * 4;
+    var dx = (Math.random() - 0.5) * 9;
+    var dy = (Math.random() - 0.5) * 9;
       
-      flyArray.push(new Fly(x, y, dx, dy, radius)); 
-      flyArray[i].draw();
-    }
+    flyArray.push(new Fly(x, y, dx, dy, radius)); 
+    flyArray[i].draw();
+  }
 }
 
 
@@ -305,62 +289,51 @@ function textGameOver(txt, fnt, x, y) {
 }
 
 function drawGameOverPage() {
- 
     ctx.beginPath();
     ctx.fillStyle = '#DAD7DE';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     textGameOver('GAME OVER', '75px Arial', canvas.width/2, canvas.height/3.5);
     textGameOver(`Score: ${score}`, '30px Arial', canvas.width/2, canvas.height/3.5 + 75);
     startBtn.style.display = 'inline-block';
-  
 }
-
-
 
 function animate() {
   requestAnimationFrame(animate);
   // to clear previous frames and show only the current frame:
   ctx.clearRect(0, 0, innerWidth, innerHeight);
 
-
+  for (var i = 0; i < flyArray.length; i++) {
+    flyArray[i].move(); 
+    flyArray[i].FlyParts();
+    
+  }
+  // deadFlyArray[0].move();
+  if (deadFlyArray.length > 0) {
+    for (var j = 0; j < deadFlyArray.length; j++) {
+      deadFlyArray[j].move();
+      deadFlyArray[j].brokenFlyParts();
+      // deadFlyArray[j].dy += 1;
+      if (deadFlyArray[j].y > innerHeight - (deadFlyArray[j].radius * 2)) {
+        deadFlyArray.splice([j], 1);
+      }
+    }
+  }
+    
+  function stopFly() {
     for (var i = 0; i < flyArray.length; i++) {
-      flyArray[i].move(); 
-      flyArray[i].FlyParts();
-      
-    }
-    // deadFlyArray[0].move();
-    if (deadFlyArray.length > 0) {
-      for (var j = 0; j < deadFlyArray.length; j++) {
-        deadFlyArray[j].move();
-        deadFlyArray[j].brokenFlyParts();
-        // deadFlyArray[j].dy += 1;
-        if (deadFlyArray[j].y > innerHeight - (deadFlyArray[j].radius * 2)) {
-          deadFlyArray.splice([j], 1);
-        }
+      if (flyArray.length % 2 !== 0) {
+        if ((flyArray[i].dx > 3.5 || flyArray[i].dy > 3.5) || (flyArray[i].dx < -3.5 || flyArray[i].dy < -3.5)) {
+          flyArray[i].dx = 0;
+          flyArray[i].dy = 0;
+        } 
+      } else if (flyArray.length % 2 === 0) {
+        if (flyArray[i].dx === 0 && flyArray[i].dy === 0) {
+          flyArray[i].dx = (Math.random() - 0.5) * 9;
+          flyArray[i].dy = (Math.random() - 0.5) * 9;
+        } 
       }
     }
-    
-    
-    
-     
-    
-    
-  
-    function stopFly() {
-      for (var i = 0; i < flyArray.length; i++) {
-        if (flyArray.length % 2 !== 0) {
-          if ((flyArray[i].dx > 3.5 || flyArray[i].dy > 3.5) || (flyArray[i].dx < -3.5 || flyArray[i].dy < -3.5)) {
-            flyArray[i].dx = 0;
-            flyArray[i].dy = 0;
-          } 
-        } else if (flyArray.length % 2 === 0) {
-          if (flyArray[i].dx === 0 && flyArray[i].dy === 0) {
-            flyArray[i].dx = (Math.random() - 0.5) * 9;
-            flyArray[i].dy = (Math.random() - 0.5) * 9;
-          } 
-        }
-      }
-    }
+  }
   stopFly();
   
   new SwatterCircle();
